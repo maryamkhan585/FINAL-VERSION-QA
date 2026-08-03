@@ -1593,6 +1593,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function isFunctionalRequirement(j) {
         if (!j) return false;
+        if (j.tcId && j.tcId.startsWith('FT-')) return true;
         if (j.reqType === 'FUNCTIONAL') return true;
         if (j.reqType === 'NON-FUNCTIONAL') return false;
         if (j.tool === 'API Tester') return true;
@@ -1793,13 +1794,15 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. Playwright / Core Functional Test Justifications
         if (results.playwright || (playwrightCases && playwrightCases.length > 0)) {
             playwrightCases.forEach((tc, idx) => {
-                const isSecOrAcc = /security|ssl|accessibility|aria|viewport|responsive|hsts|csp|alt attribute/i.test((tc.testScenario || tc.name || '') + ' ' + (tc.desc || ''));
-                const tcReqType = isSecOrAcc ? "NON-FUNCTIONAL" : "FUNCTIONAL";
+                const tcIdStr = tc.id || `FT-${String(idx + 1).padStart(3, '0')}`;
+                const isExplicitFt = tcIdStr.startsWith('FT-');
+                const isSecOrAcc = !isExplicitFt && /ssl|accessibility|aria|viewport|responsive|hsts|csp|alt attribute/i.test((tc.testScenario || tc.name || '') + ' ' + (tc.desc || ''));
+                const tcReqType = isExplicitFt ? "FUNCTIONAL" : (isSecOrAcc ? "NON-FUNCTIONAL" : "FUNCTIONAL");
                 const scenarioText = tc.testScenario || tc.name || 'Verify user workflow';
                 const expectedText = tc.expectedResult || tc.desc || 'Verified successfully';
 
                 list.push({
-                    tcId: tc.id || `FT-${String(idx + 1).padStart(3, '0')}`,
+                    tcId: tcIdStr,
                     module: tc.module || (tcReqType === 'FUNCTIONAL' ? 'User Flow & Functional' : 'Quality & Performance'),
                     testScenario: scenarioText,
                     precondition: tc.precondition || 'Target portal accessible',
