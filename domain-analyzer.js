@@ -5,7 +5,7 @@
 
 function analyzeTargetPortal(url) {
     let rawInput = (url || 'https://example.com').trim().replace(/^["']|["']$/g, '');
-    const isApk = /\.apk/i.test(rawInput) || /trillioni/i.test(rawInput) || /^[a-zA-Z]:[\\/].*\.apk/i.test(rawInput);
+    const isApk = /\.apk/i.test(rawInput) || /trillioni/i.test(rawInput) || /^[a-zA-Z]:[\\/].*\.apk/i.test(rawInput) || (!/^https?:\/\//i.test(rawInput) && !/\.(com|org|net|io|co|uk|de|eu|us|gov|edu|dev|app|store|info|xyz|local)/i.test(rawInput));
     const isLocalFile = isApk || /^[a-zA-Z]:[\\/]/i.test(rawInput) || /^file:\/\//i.test(rawInput);
 
     if (isApk || isLocalFile) {
