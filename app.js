@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // State Variables
     // -------------------------------------------------------------
     let isServerConnected = false;
+    let currentPortalProfile = null;
     let scanResults = {
         playwright: null,
         appium: null,
@@ -218,13 +219,15 @@ document.addEventListener('DOMContentLoaded', () => {
         resetCardStatus('lighthouse');
         resetCardStatus('api');
 
+        let portalProfile = null;
+
         try {
             // Check if URL is local or APK path
             const isLocalTarget = isLocalFilePath || /localhost|127\.0\.0\.1/i.test(activeUrl);
 
             // [DYNAMIC DAST/API] Compute portalProfile ONCE before all audit calls
             // This ensures DAST and API audits use the same portal classification
-            const portalProfile = typeof analyzeTargetPortal === 'function'
+            portalProfile = typeof analyzeTargetPortal === 'function'
                 ? analyzeTargetPortal(activeUrl)
                 : {
                     category: "Enterprise Web Service",
@@ -238,6 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         { id: "API-02", name: "Service Discovery & robots.txt Compliance Probe", desc: "Checks robots.txt, sitemap.xml, and service discovery routes." }
                     ]
                 };
+            currentPortalProfile = portalProfile;
 
             logToTerminal(`[Portal Analysis] Classified as: ${portalProfile.category}`, "info");
             if (portalProfile.subType) {
@@ -279,6 +283,10 @@ document.addEventListener('DOMContentLoaded', () => {
         } finally {
             // Render Live Test Results List directly on Dashboard View GUARANTEED
             try {
+                if (!portalProfile && typeof analyzeTargetPortal === 'function') {
+                    portalProfile = analyzeTargetPortal(activeUrl);
+                    currentPortalProfile = portalProfile;
+                }
                 const justifications = generateDetailedAuditJustifications(activeUrl, scanResults, portalProfile);
                 renderDashboardTestCases(portalProfile, justifications);
             } catch (renderErr) {
@@ -1261,6 +1269,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ? analyzeTargetPortal(url)
             : { category: "Enterprise Web Service", domain: domain };
 
+        const displayDomain = (portalProfile && portalProfile.domain) || domain;
         const isLocal = /localhost|127\.0\.0\.1/i.test(url);
 
         // Fetch screenshot urls
@@ -1274,7 +1283,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const newRun = {
             id: `run_${Date.now()}`,
             projectUrl: url,
-            domain: domain,
+            domain: displayDomain,
             portalProfile: portalProfile,
             timestamp: date.toISOString(),
             formattedDate: formattedDate,
@@ -1750,6 +1759,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderDashboardTestCases(portalProfile, justifications) {
         if (!dashTestResultsSec || !dashTestCasesList) return;
         activeJustifications = justifications || [];
+        if (portalProfile) currentPortalProfile = portalProfile;
 
         if (dashPortalBadge) {
             dashPortalBadge.textContent = portalProfile ? portalProfile.category : "Enterprise Web Service";
@@ -1873,10 +1883,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             for (let name in headers) {
                 const h = headers[name];
-                let dastCase = dastCases.find(dc =>
-                    name.includes(dc.name.split(':')[0]) ||
-                    headerToDastMap[name] === dc.id
-                );
+                let dastCase = dastCases.find(dc => {
+                    const caseName = dc.name || dc.testScenario || '';
+                    return name.includes(caseName.split(':')[0]) || headerToDastMap[name] === dc.id;
+                });
 
                 if (!dastCase) {
                     dastCase = dastCases[dastIndex % dastCases.length] || dastCases[0] || { id: "SEC-01", module: "Security Baseline", testScenario: "HTTP Security Header Check", precondition: "Server reachable", testSteps: "Audit HTTP response headers", expectedResult: "Security headers present", priority: "Critical", desc: h.description };
@@ -1885,6 +1895,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const isPass = h.status === "PASS";
                 if (!list.some(item => item.tcId === dastCase.id)) {
+                    const cTitle = dastCase.name || dastCase.testScenario || 'Security Audit Check';
                     list.push({
                         tcId: dastCase.id || "SEC-01",
                         module: dastCase.module || "Security Audit",
@@ -1893,7 +1904,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         testSteps: dastCase.testSteps || `Inspect presence and value of HTTP header '${h.header}'`,
                         expectedResult: dastCase.expectedResult || `Header '${h.header}' is present with secure configuration`,
                         priority: dastCase.priority || "Critical",
-                        title: `${dastCase.id}: ${dastCase.name}`,
+                        title: `${dastCase.id}: ${cTitle}`,
                         tool: "DAST Security",
                         reqType: "NON-FUNCTIONAL",
                         status: isPass ? "PASSED" : "FAILED",
