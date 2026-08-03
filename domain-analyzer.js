@@ -12,47 +12,56 @@ function analyzeTargetPortal(url) {
         const filename = rawInput.split(/[\\/]/).pop() || 'AppPackage.apk';
         const appName = filename.replace(/\.apk$/i, '');
         const cleanAppName = appName.charAt(0).toUpperCase() + appName.slice(1);
+        const apkDomain = filename.toLowerCase().endsWith('.apk') ? filename : `${filename}.apk`;
+
+        const rawPlaywright = [
+            { id: "FT-001", name: `Verify ${cleanAppName} installs successfully`, module: "App Installation", testScenario: `Verify ${cleanAppName} installs successfully`, precondition: "Valid .apk package file provided", testSteps: "Install package on Android device or emulator", expectedResult: "App installs cleanly without package collision or signature errors", priority: "Critical" },
+            { id: "FT-002", name: `Verify ${cleanAppName} cold boot launch`, module: "App Launch", testScenario: `Verify ${cleanAppName} cold boot launch`, precondition: "App is installed on device", testSteps: "Tap app icon to launch application", expectedResult: "Splash screen displays and main screen loads within 3 seconds", priority: "Critical" },
+            { id: "FT-003", name: "Verify new user registration flow", module: "User Registration", testScenario: "Verify new user registration flow", precondition: "User is not logged in", testSteps: "Enter valid email, mobile number, and password; tap Register", expectedResult: "Account is created and verification code requested", priority: "High" },
+            { id: "FT-004", name: "Verify login with valid credentials", module: "Authentication", testScenario: "Verify login with valid credentials", precondition: "Registered active user account exists", testSteps: "Enter correct username and password; tap Sign In", expectedResult: "User authenticated and taken to main app dashboard", priority: "Critical" },
+            { id: "FT-005", name: "Verify invalid login rejection", module: "Authentication Validation", testScenario: "Verify invalid login rejection", precondition: "User on login screen", testSteps: "Enter incorrect password and tap Sign In", expectedResult: "Access denied with clear error message; session not opened", priority: "High" },
+            { id: "FT-006", name: "Verify runtime permission prompts", module: "Permissions", testScenario: "Verify runtime permission prompts", precondition: "Freshly installed app session", testSteps: "Trigger feature requiring Camera or Storage permission", expectedResult: "System permission dialog opens cleanly asking for user approval", priority: "High" },
+            { id: "FT-007", name: "Verify bottom navigation tabs", module: "Navigation", testScenario: "Verify bottom navigation tabs", precondition: "User on main screen", testSteps: "Tap through all bottom navigation items", expectedResult: "Corresponding screens load quickly without lag or crash", priority: "High" },
+            { id: "FT-008", name: "Verify mandatory form fields", module: "Form Validation", testScenario: "Verify mandatory form fields", precondition: "User on data entry screen", testSteps: "Leave mandatory fields empty and tap Submit", expectedResult: "Submission blocked and missing required fields highlighted", priority: "High" },
+            { id: "FT-009", name: "Verify profile details update", module: "Profile Management", testScenario: "Verify profile details update", precondition: "User is logged in", testSteps: "Edit name or profile email and tap Save", expectedResult: "Profile updates saved successfully and reflected on dashboard", priority: "Medium" },
+            { id: "FT-010", name: "Verify push notification handling", module: "Push Notifications", testScenario: "Verify push notification handling", precondition: "App is running in background", testSteps: "Send test notification payload to device", expectedResult: "Notification banner displays; tapping opens target app screen", priority: "Medium" },
+            { id: "FT-011", name: "Verify local session storage", module: "Data Persistence", testScenario: "Verify local session storage", precondition: "User logged in", testSteps: "Close and reopen app", expectedResult: "User session remains active without forcing re-login", priority: "High" },
+            { id: "FT-012", name: "Verify network connection failure handling", module: "Offline Mode", testScenario: "Verify network connection failure handling", precondition: "Device Wi-Fi and mobile data disabled", testSteps: "Perform action requiring internet connection", expectedResult: "Offline message displayed with clear retry button", priority: "High" },
+            { id: "FT-013", name: "Verify root and debug protection", module: "Security", testScenario: "Verify root and debug protection", precondition: "App running on device", testSteps: "Attempt debug attachment or root access check", expectedResult: "Application restricts sensitive data extraction and debug flags", priority: "Critical" },
+            { id: "FT-014", name: "Verify user logout", module: "Session Logout", testScenario: "Verify user logout", precondition: "User is logged in", testSteps: "Tap Logout in profile settings", expectedResult: "Session cleared and user returned to login screen", priority: "High" },
+            { id: "FT-015", name: "Verify backend timeout resilience", module: "Error Handling", testScenario: "Verify backend timeout resilience", precondition: "Simulate backend 500 error or timeout", testSteps: "Trigger network transaction in app", expectedResult: "Safe error banner shown; app does not freeze or crash", priority: "Critical" }
+        ];
+
+        const rawAppium = [
+            { id: "MTC-01", name: `Verify ${cleanAppName} mobile screen layout bounds`, module: "Mobile Layout", testScenario: `Verify ${cleanAppName} mobile screen layout bounds`, precondition: "App running on mobile device", testSteps: "Audit screen layout containers across mobile resolutions", expectedResult: "UI elements fit within screen margins without text truncation", priority: "High" },
+            { id: "MTC-02", name: `Verify button tap target dimensions`, module: "Touch Targets", testScenario: `Verify button tap target dimensions`, precondition: "App interactive screen active", testSteps: "Inspect tap target sizing for main action buttons", expectedResult: "Action buttons satisfy finger tap accuracy guidelines", priority: "High" }
+        ];
+
+        const rawDast = [
+            { id: "SEC-01", name: `Verify Android manifest permissions safety`, module: "Package Security", testScenario: `Verify Android manifest permissions safety`, precondition: "APK binary compiled", testSteps: "Inspect declared package permissions in AndroidManifest.xml", expectedResult: "No unneeded or dangerous permissions declared", priority: "Critical" },
+            { id: "SEC-02", name: `Verify SSL pinning & network security config`, module: "Transport Security", testScenario: `Verify SSL pinning & network security config`, precondition: "App network layer configured", testSteps: "Inspect res/xml/network_security_config.xml and TLS certs", expectedResult: "Encrypted HTTPS communication enforced; unencrypted HTTP blocked", priority: "Critical" },
+            { id: "SEC-03", name: `Verify android:debuggable and allowBackup flags`, module: "Vulnerability Check", testScenario: `Verify android:debuggable and allowBackup flags`, precondition: "APK manifest active", testSteps: "Check debuggable and allowBackup flags", expectedResult: "Flags set safely to prevent unauthorized data backup", priority: "Critical" },
+            { id: "SEC-04", name: `Verify hardcoded secret token leakage`, module: "Secret Inspection", testScenario: `Verify hardcoded secret token leakage`, precondition: "DEX bytecode compiled", testSteps: "Scan asset files and DEX classes for exposed API keys", expectedResult: "No private secret keys or passwords exposed in code", priority: "Critical" },
+            { id: "SEC-05", name: `Verify ProGuard / R8 code obfuscation`, module: "Code Protection", testScenario: `Verify ProGuard / R8 code obfuscation`, precondition: "Production APK built", testSteps: "Decompile DEX classes and inspect symbol names", expectedResult: "Code obfuscated cleanly to resist reverse-engineering", priority: "High" }
+        ];
+
+        const rawApi = [
+            { id: "API-01", name: `Verify backend REST API endpoint (/api)`, module: "Backend Gateway", testScenario: `Verify backend REST API endpoint (/api)`, precondition: "Backend server online", testSteps: "Send probe request to mobile app backend gateway", expectedResult: "API endpoint responds with valid HTTP 200 status", priority: "Critical", path: '/api' },
+            { id: "API-02", name: `Verify auth session refresh endpoint (/auth)`, module: "Session Refresh", testScenario: `Verify auth session refresh endpoint (/auth)`, precondition: "Auth server online", testSteps: "Probe authentication refresh API route", expectedResult: "Auth route responds cleanly with status OK", priority: "Critical", path: '/auth' },
+            { id: "API-03", name: `Verify app health check route (/status)`, module: "System Health", testScenario: `Verify app health check route (/status)`, precondition: "Server online", testSteps: "Probe system status and health check route", expectedResult: "Health route reports operational status", priority: "Medium", path: '/status' }
+        ];
 
         return {
             category: `Android Native Application (.apk)`,
-            domain: filename,
+            domain: apkDomain,
             badgeColor: "var(--accent-cyan)",
             description: `Functional QA checklist & security audit suite for ${cleanAppName} Android package`,
             isApk: true,
             apkPath: rawInput,
-            playwrightCases: [
-                { id: "FT-001", module: "App Installation", testScenario: `Verify ${cleanAppName} installs successfully`, precondition: "Valid .apk package file provided", testSteps: "Install package on Android device or emulator", expectedResult: "App installs cleanly without package collision or signature errors", priority: "Critical" },
-                { id: "FT-002", module: "App Launch", testScenario: `Verify ${cleanAppName} cold boot launch`, precondition: "App is installed on device", testSteps: "Tap app icon to launch application", expectedResult: "Splash screen displays and main screen loads within 3 seconds", priority: "Critical" },
-                { id: "FT-003", module: "User Registration", testScenario: "Verify new user registration flow", precondition: "User is not logged in", testSteps: "Enter valid email, mobile number, and password; tap Register", expectedResult: "Account is created and verification code requested", priority: "High" },
-                { id: "FT-004", module: "Authentication", testScenario: "Verify login with valid credentials", precondition: "Registered active user account exists", testSteps: "Enter correct username and password; tap Sign In", expectedResult: "User authenticated and taken to main app dashboard", priority: "Critical" },
-                { id: "FT-005", module: "Authentication Validation", testScenario: "Verify invalid login rejection", precondition: "User on login screen", testSteps: "Enter incorrect password and tap Sign In", expectedResult: "Access denied with clear error message; session not opened", priority: "High" },
-                { id: "FT-006", module: "Permissions", testScenario: "Verify runtime permission prompts", precondition: "Freshly installed app session", testSteps: "Trigger feature requiring Camera or Storage permission", expectedResult: "System permission dialog opens cleanly asking for user approval", priority: "High" },
-                { id: "FT-007", module: "Navigation", testScenario: "Verify bottom navigation tabs", precondition: "User on main screen", testSteps: "Tap through all bottom navigation items", expectedResult: "Corresponding screens load quickly without lag or crash", priority: "High" },
-                { id: "FT-008", module: "Form Validation", testScenario: "Verify mandatory form fields", precondition: "User on data entry screen", testSteps: "Leave mandatory fields empty and tap Submit", expectedResult: "Submission blocked and missing required fields highlighted", priority: "High" },
-                { id: "FT-009", module: "Profile Management", testScenario: "Verify profile details update", precondition: "User is logged in", testSteps: "Edit name or profile email and tap Save", expectedResult: "Profile updates saved successfully and reflected on dashboard", priority: "Medium" },
-                { id: "FT-010", module: "Push Notifications", testScenario: "Verify push notification handling", precondition: "App is running in background", testSteps: "Send test notification payload to device", expectedResult: "Notification banner displays; tapping opens target app screen", priority: "Medium" },
-                { id: "FT-011", module: "Data Persistence", testScenario: "Verify local session storage", precondition: "User logged in", testSteps: "Close and reopen app", expectedResult: "User session remains active without forcing re-login", priority: "High" },
-                { id: "FT-012", module: "Offline Mode", testScenario: "Verify network connection failure handling", precondition: "Device Wi-Fi and mobile data disabled", testSteps: "Perform action requiring internet connection", expectedResult: "Offline message displayed with clear retry button", priority: "High" },
-                { id: "FT-013", module: "Security", testScenario: "Verify root and debug protection", precondition: "App running on device", testSteps: "Attempt debug attachment or root access check", expectedResult: "Application restricts sensitive data extraction and debug flags", priority: "Critical" },
-                { id: "FT-014", module: "Session Logout", testScenario: "Verify user logout", precondition: "User is logged in", testSteps: "Tap Logout in profile settings", expectedResult: "Session cleared and user returned to login screen", priority: "High" },
-                { id: "FT-015", module: "Error Handling", testScenario: "Verify backend timeout resilience", precondition: "Simulate backend 500 error or timeout", testSteps: "Trigger network transaction in app", expectedResult: "Safe error banner shown; app does not freeze or crash", priority: "Critical" }
-            ],
-            appiumCases: [
-                { id: "MTC-01", module: "Mobile Layout", testScenario: `Verify ${cleanAppName} mobile screen layout bounds`, precondition: "App running on mobile device", testSteps: "Audit screen layout containers across mobile resolutions", expectedResult: "UI elements fit within screen margins without text truncation", priority: "High" },
-                { id: "MTC-02", module: "Touch Targets", testScenario: `Verify button tap target dimensions`, precondition: "App interactive screen active", testSteps: "Inspect tap target sizing for main action buttons", expectedResult: "Action buttons satisfy finger tap accuracy guidelines", priority: "High" }
-            ],
-            dastCases: [
-                { id: "SEC-01", module: "Package Security", testScenario: `Verify Android manifest permissions safety`, precondition: "APK binary compiled", testSteps: "Inspect declared package permissions in AndroidManifest.xml", expectedResult: "No unneeded or dangerous permissions declared", priority: "Critical" },
-                { id: "SEC-02", module: "Transport Security", testScenario: `Verify SSL pinning & network security config`, precondition: "App network layer configured", testSteps: "Inspect res/xml/network_security_config.xml and TLS certs", expectedResult: "Encrypted HTTPS communication enforced; unencrypted HTTP blocked", priority: "Critical" },
-                { id: "SEC-03", module: "Vulnerability Check", testScenario: `Verify android:debuggable and allowBackup flags`, precondition: "APK manifest active", testSteps: "Check debuggable and allowBackup flags", expectedResult: "Flags set safely to prevent unauthorized data backup", priority: "Critical" },
-                { id: "SEC-04", module: "Secret Inspection", testScenario: `Verify hardcoded secret token leakage`, precondition: "DEX bytecode compiled", testSteps: "Scan asset files and DEX classes for exposed API keys", expectedResult: "No private secret keys or passwords exposed in code", priority: "Critical" },
-                { id: "SEC-05", module: "Code Protection", testScenario: `Verify ProGuard / R8 code obfuscation`, precondition: "Production APK built", testSteps: "Decompile DEX classes and inspect symbol names", expectedResult: "Code obfuscated cleanly to resist reverse-engineering", priority: "High" }
-            ],
-            apiCases: [
-                { id: "API-01", module: "Backend Gateway", testScenario: `Verify backend REST API endpoint (/api)`, precondition: "Backend server online", testSteps: "Send probe request to mobile app backend gateway", expectedResult: "API endpoint responds with valid HTTP 200 status", priority: "Critical", path: '/api' },
-                { id: "API-02", module: "Session Refresh", testScenario: `Verify auth session refresh endpoint (/auth)`, precondition: "Auth server online", testSteps: "Probe authentication refresh API route", expectedResult: "Auth route responds cleanly with status OK", priority: "Critical", path: '/auth' },
-                { id: "API-03", module: "System Health", testScenario: `Verify app health check route (/status)`, precondition: "Server online", testSteps: "Probe system status and health check route", expectedResult: "Health route reports operational status", priority: "Medium", path: '/status' }
-            ]
+            playwrightCases: rawPlaywright.map(c => normalizeCase(c, "App Functionality", "High")),
+            appiumCases: rawAppium.map(c => normalizeCase(c, "Mobile UX", "High")),
+            dastCases: rawDast.map(c => normalizeCase(c, "APK Security Audit", "Critical")),
+            apiCases: rawApi.map(c => normalizeCase(c, "Backend Gateway", "High"))
         };
     }
 
