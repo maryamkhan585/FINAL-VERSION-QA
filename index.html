@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automated Testing Platform</title>
+    <meta name="description" content="A premium automated web and mobile testing suite incorporating Playwright, Appium, DAST, Lighthouse, and API endpoint verification.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside>
+            <div class="brand-section">
+                <div class="brand-logo">AG</div>
+                <div class="brand-title">Automated Testing</div>
+            </div>
+            
+            <nav>
+                <ul class="nav-links">
+                    <li>
+                        <div id="nav-dashboard" class="nav-item active">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
+                            </svg>
+                            <span>Dashboard</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div id="nav-playwright" class="nav-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
+                            </svg>
+                            <span>Playwright</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div id="nav-appium" class="nav-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+                            </svg>
+                            <span>Appium Mobile</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div id="nav-dast" class="nav-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.751A11.956 11.956 0 0 1 12 2.714Z" />
+                            </svg>
+                            <span>DAST Security</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div id="nav-lighthouse" class="nav-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.468 5.99 5.99 0 0 0-1.925 3.547 5.975 5.975 0 0 1-2.14 1.837A3.75 3.75 0 0 0 12 18Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 2.25V4.5m5.303.197-1.591 1.591m2.914 2.914-1.591 1.591m1.591 5.303H19.5m-.197 5.303-1.591-1.591m-2.914 2.914-1.591-1.591m-5.303 1.591V19.5m-1.591-.197 1.591-1.591m-2.914-2.914 1.591-1.591M4.5 12H2.25m.197-5.303 1.591 1.591m2.914-2.914 1.591 1.591" />
+                            </svg>
+                            <span>Lighthouse</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div id="nav-api" class="nav-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-.778.099-1.533.284-2.253" />
+                            </svg>
+                            <span>API Tester</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div id="nav-history" class="nav-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                            <span>Projects & Reports</span>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-avatar">QA</div>
+                <div class="user-info">
+                    <h4>Antigravity Runner</h4>
+                    <p>Testing System v1.1</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Panel Content -->
+        <main>
+            <!-- Header section -->
+            <header>
+                <div class="header-title">
+                    <h1 id="app-title-header">Automated Test Portal</h1>
+                    <p id="app-subtitle-header">Continuous QA and Security Audits for web services</p>
+                </div>
+                <div class="global-status">
+                    <div id="connection-status" class="status-badge">
+                        <span id="connection-dot" class="status-dot"></span>
+                        <span id="connection-text">Checking server...</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- VIEW 1: Dashboard Panel -->
+            <section id="view-dashboard" class="view-panel active">
+                <div class="input-console-grid">
+                    <!-- Form block -->
+                    <div class="glass-card">
+                        <div class="card-title-sec">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="var(--accent-purple)" width="22" height="22">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                            <span>Configure Audit Session</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="target-url" class="form-label">Target URL or APK File Path (Website, Web App, or Android .apk)</label>
+                            <div class="input-with-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3" />
+                                </svg>
+                                <input type="text" id="target-url" class="input-field" placeholder="https://example.com or C:\path\to\app.apk" value="https://example.com" required>
+                            </div>
+                        </div>
+
+                        <label class="form-label">Select Testing Suites to Run</label>
+                        <div class="tool-toggles-grid">
+                            <div class="toggle-item">
+                                <div class="toggle-info">
+                                    <span class="status-dot active" style="background-color: var(--accent-purple); box-shadow: 0 0 8px var(--accent-purple);"></span>
+                                    <div>
+                                        <h5>Playwright Tests</h5>
+                                        <p>Desktop UI validation & load metrics</p>
+                                    </div>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="run-playwright" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <!-- Playwright Credentials Config Sub-panel -->
+                            <div id="playwright-sub-options" class="sub-options-container">
+                                <div class="sub-toggle-item">
+                                    <div class="toggle-info">
+                                        <span class="status-dot" style="background-color: var(--accent-purple); box-shadow: 0 0 8px var(--accent-purple); opacity: 0.7;"></span>
+                                        <div>
+                                            <h6 style="margin: 0; font-size: 0.85rem; font-weight: 600;">Enable Login Verification</h6>
+                                        </div>
+                                    </div>
+                                    <label class="switch" style="transform: scale(0.85);">
+                                        <input type="checkbox" id="playwright-login-enable">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div id="playwright-login-details" class="sub-options-fields" style="display: none;">
+                                    <div class="form-group" style="margin-bottom: 8px;">
+                                        <label for="playwright-username" class="form-label" style="font-size: 0.75rem; margin-bottom: 4px;">Username / Email</label>
+                                        <input type="text" id="playwright-username" class="input-field" placeholder="e.g. admin@example.com" style="padding: 6px 10px; font-size: 0.85rem;" value="admin@example.com">
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 8px;">
+                                        <label for="playwright-password" class="form-label" style="font-size: 0.75rem; margin-bottom: 4px;">Password</label>
+                                        <input type="password" id="playwright-password" class="input-field" placeholder="••••••••" style="padding: 6px 10px; font-size: 0.85rem;" value="SuperSecretPassword123!">
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 8px;">
+                                        <label for="playwright-iban" class="form-label" style="font-size: 0.75rem; margin-bottom: 4px;">IBAN / Financial Account Number</label>
+                                        <input type="text" id="playwright-iban" class="input-field" placeholder="e.g. DE89370400440532013000" style="padding: 6px 10px; font-size: 0.85rem;" value="DE89370400440532013000">
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 8px;">
+                                        <label for="playwright-user-selector" class="form-label" style="font-size: 0.75rem; margin-bottom: 4px;">Username Selector (CSS)</label>
+                                        <input type="text" id="playwright-user-selector" class="input-field" placeholder="#username" style="padding: 6px 10px; font-size: 0.85rem;" value="#username">
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 8px;">
+                                        <label for="playwright-pass-selector" class="form-label" style="font-size: 0.75rem; margin-bottom: 4px;">Password Selector (CSS)</label>
+                                        <input type="text" id="playwright-pass-selector" class="input-field" placeholder="#password" style="padding: 6px 10px; font-size: 0.85rem;" value="#password">
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 8px;">
+                                        <label for="playwright-iban-selector" class="form-label" style="font-size: 0.75rem; margin-bottom: 4px;">IBAN Selector (CSS)</label>
+                                        <input type="text" id="playwright-iban-selector" class="input-field" placeholder="#iban-input" style="padding: 6px 10px; font-size: 0.85rem;" value="#iban-input">
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label for="playwright-submit-selector" class="form-label" style="font-size: 0.75rem; margin-bottom: 4px;">Submit Button Selector (CSS)</label>
+                                        <input type="text" id="playwright-submit-selector" class="input-field" placeholder="button[type='submit']" style="padding: 6px 10px; font-size: 0.85rem;" value="button[type='submit']">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="toggle-item">
+                                <div class="toggle-info">
+                                    <span class="status-dot active" style="background-color: var(--accent-cyan); box-shadow: 0 0 8px var(--accent-cyan);"></span>
+                                    <div>
+                                        <h5>Appium Mobile Audit</h5>
+                                        <p>Mobile responsive checks & touch UI targets</p>
+                                    </div>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="run-appium" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-item">
+                                <div class="toggle-info">
+                                    <span class="status-dot active" style="background-color: var(--accent-rose); box-shadow: 0 0 8px var(--accent-rose);"></span>
+                                    <div>
+                                        <h5>DAST Security Audit</h5>
+                                        <p>Header audit, SSL inspect & leakage checks</p>
+                                    </div>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="run-dast" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-item">
+                                <div class="toggle-info">
+                                    <span class="status-dot active" style="background-color: var(--accent-amber); box-shadow: 0 0 8px var(--accent-amber);"></span>
+                                    <div>
+                                        <h5>Lighthouse Core</h5>
+                                        <p>SEO, Performance, Best Practices score</p>
+                                    </div>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="run-lighthouse" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-item">
+                                <div class="toggle-info">
+                                    <span class="status-dot active" style="background-color: var(--accent-emerald); box-shadow: 0 0 8px var(--accent-emerald);"></span>
+                                    <div>
+                                        <h5>API Endpoint Audit</h5>
+                                        <p>Verify API status, headers & response data</p>
+                                    </div>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="run-api" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button id="run-btn" class="btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="20" height="20">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
+                            </svg>
+                            <span id="run-btn-text">Execute Automated Testing</span>
+                        </button>
+                    </div>
+
+                    <!-- Console output window -->
+                    <div class="terminal-card">
+                        <div class="terminal-header">
+                            <div class="terminal-dots">
+                                <div class="terminal-dot"></div>
+                                <div class="terminal-dot"></div>
+                                <div class="terminal-dot"></div>
+                            </div>
+                            <div class="terminal-title">Runner Core Output - Logs</div>
+                            <div></div>
+                        </div>
+                        <div id="terminal-body" class="terminal-body">
+                            <div class="terminal-line info">System idle. Ready to configure and run audits.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results display boxes -->
+                <div class="results-header-sec">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="var(--accent-cyan)" width="24" height="24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801-1.25c.307-.893 1.156-1.531 2.155-1.531 1.01 0 1.865.649 2.164 1.531m-4.329 0c-1.02.04-2.03.118-3.033.233M16.5 3.375a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 3.375v15.75a2.25 2.25 0 0 0 2.25 2.25h9.75a2.25 2.25 0 0 0 2.25-2.25V3.375Z" />
+                    </svg>
+                    <span>Test Suite Report Dashboard</span>
+                </div>
+                
+                <div class="results-grid">
+                    <!-- Card 1: Playwright Box -->
+                    <div id="card-playwright" class="tool-card">
+                        <div class="tool-card-header">
+                            <div class="tool-card-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="22" height="22">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
+                                </svg>
+                            </div>
+                            <span id="badge-playwright" class="badge pending">Pending</span>
+                        </div>
+                        <div class="tool-card-body">
+                            <h3>Playwright Tests</h3>
+                            <p>Verify e2e loads, assertions, and render structure across Chromium browser.</p>
+                        </div>
+                        <div class="tool-card-footer">
+                            <span id="metrics-playwright" class="metrics-summary">--</span>
+                            <span class="action-trigger">
+                                <span>Inspect</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="14" height="14">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Appium Box -->
+                    <div id="card-appium" class="tool-card">
+                        <div class="tool-card-header">
+                            <div class="tool-card-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="22" height="22">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+                                </svg>
+                            </div>
+                            <span id="badge-appium" class="badge pending">Pending</span>
+                        </div>
+                        <div class="tool-card-body">
+                            <h3>Appium Mobile Audit</h3>
+                            <p>Checks mobile responsive constraints and auditing tap target widths.</p>
+                        </div>
+                        <div class="tool-card-footer">
+                            <span id="metrics-appium" class="metrics-summary">--</span>
+                            <span class="action-trigger">
+                                <span>Inspect</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="14" height="14">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: DAST Box -->
+                    <div id="card-dast" class="tool-card">
+                        <div class="tool-card-header">
+                            <div class="tool-card-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="22" height="22">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.751A11.956 11.956 0 0 1 12 2.714Z" />
+                                </svg>
+                            </div>
+                            <span id="badge-dast" class="badge pending">Pending</span>
+                        </div>
+                        <div class="tool-card-body">
+                            <h3>DAST Security</h3>
+                            <p>Verify SSL configs, analyze CORS safety, and inspect for sensitive path exposure.</p>
+                        </div>
+                        <div class="tool-card-footer">
+                            <span id="metrics-dast" class="metrics-summary">--</span>
+                            <span class="action-trigger">
+                                <span>Inspect</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="14" height="14">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Lighthouse Box -->
+                    <div id="card-lighthouse" class="tool-card">
+                        <div class="tool-card-header">
+                            <div class="tool-card-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="22" height="22">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.468 5.99 5.99 0 0 0-1.925 3.547 5.975 5.975 0 0 1-2.14 1.837A3.75 3.75 0 0 0 12 18Z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 2.25V4.5m5.303.197-1.591 1.591m2.914 2.914-1.591 1.591m1.591 5.303H19.5m-.197 5.303-1.591-1.591m-2.914 2.914-1.591-1.591m-5.303 1.591V19.5m-1.591-.197 1.591-1.591m-2.914-2.914 1.591-1.591M4.5 12H2.25m.197-5.303 1.591 1.591m2.914-2.914 1.591 1.591" />
+                                </svg>
+                            </div>
+                            <span id="badge-lighthouse" class="badge pending">Pending</span>
+                        </div>
+                        <div class="tool-card-body">
+                            <h3>Lighthouse Audits</h3>
+                            <p>Verify site performance, search optimization (SEO), best-practices, and accessibility indices.</p>
+                        </div>
+                        <div class="tool-card-footer">
+                            <span id="metrics-lighthouse" class="metrics-summary">--</span>
+                            <span class="action-trigger">
+                                <span>Inspect</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="14" height="14">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Card 5: API Box -->
+                    <div id="card-api" class="tool-card">
+                        <div class="tool-card-header">
+                            <div class="tool-card-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="22" height="22">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3" />
+                                </svg>
+                            </div>
+                            <span id="badge-api" class="badge pending">Pending</span>
+                        </div>
+                        <div class="tool-card-body">
+                            <h3>API Endpoint Audit</h3>
+                            <p>Verify target service API routes, measure latency responses, and inspect CORS headers.</p>
+                        </div>
+                        <div class="tool-card-footer">
+                            <span id="metrics-api" class="metrics-summary">--</span>
+                            <span class="action-trigger">
+                                <span>Inspect</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="14" height="14">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Target Portal Test Suite Results List (Dashboard View) -->
+                <div id="dash-test-results-sec" class="glass-card" style="display: none; margin-top: 24px;">
+                    <div class="card-title-sec" style="justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 16px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="var(--accent-purple)" width="20" height="20">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                            <span style="font-weight: 700; font-size: 1.05rem; color: var(--text-primary);">Dynamic Target Test Suite Results</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span id="dash-portal-badge" class="badge" style="background: rgba(139,92,246,0.15); color: var(--accent-purple); border: 1px solid var(--accent-purple); font-size: 0.75rem; padding: 4px 10px;">--</span>
+                            <button type="button" id="dash-btn-export-qa-html" class="btn-primary" style="padding: 5px 12px; font-size: 0.78rem; background: #064D32; border: 1px solid #10b981; color: #fff; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="14" height="14">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                                </svg>
+                                <span>Export QA Checklist HTML</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <span style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">Layout:</span>
+                            <button type="button" id="view-btn-cards" class="req-filter-btn active" style="padding: 4px 10px; font-size: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--accent-purple); background: var(--accent-purple); color: #fff; cursor: pointer; font-weight: 600;">🎴 Cards</button>
+                            <button type="button" id="view-btn-table" class="req-filter-btn" style="padding: 4px 10px; font-size: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-secondary); cursor: pointer; font-weight: 600;">📊 7-Column Table View</button>
+                        </div>
+                        <div style="display: flex; gap: 8px; z-index: 10; position: relative;">
+                            <button type="button" id="filter-btn-all" class="req-filter-btn active" style="padding: 6px 14px; font-size: 0.78rem; border-radius: var(--radius-sm); border: 1px solid var(--accent-purple); background: var(--accent-purple); color: #fff; cursor: pointer; font-weight: 600;">All Tests</button>
+                            <button type="button" id="filter-btn-fr" class="req-filter-btn" style="padding: 6px 14px; font-size: 0.78rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-secondary); cursor: pointer; font-weight: 600;">⚡ Functional (FR)</button>
+                            <button type="button" id="filter-btn-nfr" class="req-filter-btn" style="padding: 6px 14px; font-size: 0.78rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--text-secondary); cursor: pointer; font-weight: 600;">🛡️ Non-Functional (NFR)</button>
+                        </div>
+                    </div>
+                    <!-- View Mode 1: Cards View -->
+                    <div id="dash-test-cases-list" style="display: flex; flex-direction: column; gap: 10px;">
+                        <!-- Injected dynamically upon test completion -->
+                    </div>
+                    <!-- View Mode 2: 7-Column Table View (Europe Wallet Format) -->
+                    <div id="dash-test-cases-table-container" style="display: none; margin-top: 10px;">
+                        <!-- Injected dynamically matching Europe Wallet table format -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 2: Playwright Results Detail -->
+            <section id="view-playwright-panel" class="view-panel">
+                <div class="glass-card" style="margin-bottom: 24px;">
+                    <div class="card-title-sec">
+                        <span>Playwright Audit Results</span>
+                    </div>
+                    <div class="test-summary-strip">
+                        <div class="metric-strip-card">
+                            <div id="playwright-status-val" class="val">--</div>
+                            <div class="label">Session Status</div>
+                        </div>
+                        <div class="metric-strip-card">
+                            <div id="playwright-time-val" class="val">--</div>
+                            <div class="label">Page Load Time</div>
+                        </div>
+                        <div class="metric-strip-card">
+                            <div id="playwright-elements-val" class="val">--</div>
+                            <div class="label">DOM Elements Checked</div>
+                        </div>
+                        <div class="metric-strip-card">
+                            <div id="playwright-errors-val" class="val">--</div>
+                            <div class="label">Console Warn/Errors</div>
+                        </div>
+                    </div>
+
+                    <h4 class="form-label" style="margin-bottom: 12px;">Audited Page Visual Screenshot</h4>
+                    <div class="screenshot-container">
+                        <img id="playwright-screenshot" class="screenshot-img" src="" alt="Desktop Page Visual Viewport">
+                        <div id="playwright-screenshot-loading" class="no-screenshot">No screenshot loaded yet. Run a test.</div>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <div class="card-title-sec">
+                        <span>Exportable Playwright Test Automation Script</span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">
+                        Copy this JavaScript test suite and save it under your Playwright workspace directory as <code>tests/audit.spec.js</code> to run these checks on your pipeline.
+                    </p>
+                    <div class="code-box-wrapper">
+                        <div class="code-box-header">
+                            <span class="code-box-lang">Javascript (Playwright Test)</span>
+                            <button id="btn-copy-playwright" class="code-copy-btn">Copy Script Code</button>
+                        </div>
+                        <pre><code id="code-playwright" class="code-box">/* Run test to compile script */</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 3: Appium Results Detail -->
+            <section id="view-appium-panel" class="view-panel">
+                <div class="glass-card" style="margin-bottom: 24px;">
+                    <div class="card-title-sec">
+                        <span>Appium Mobile Browser Test Reports</span>
+                    </div>
+                    
+                    <div class="api-tester-container">
+                        <div>
+                            <div class="test-summary-strip" style="grid-template-columns: repeat(2, 1fr); margin-bottom: 20px;">
+                                <div class="metric-strip-card">
+                                    <div id="appium-status-val" class="val">--</div>
+                                    <div class="label">Touch Target Compliance</div>
+                                </div>
+                                <div class="metric-strip-card">
+                                    <div id="appium-warnings-val" class="val">--</div>
+                                    <div class="label">Responsive Warnings</div>
+                                </div>
+                            </div>
+                            <div class="vuln-cards-list">
+                                <div class="vuln-card info" style="border-left-color: var(--accent-cyan);">
+                                    <div class="vuln-card-header">
+                                        <span class="vuln-card-title">Viewport Width Compliance Check</span>
+                                        <span class="vuln-card-badge info">INFO</span>
+                                    </div>
+                                    <p class="vuln-card-desc">Verified layout sizing under 360px portrait devices. Fits viewport without horizontal body overflow.</p>
+                                </div>
+                                <div class="vuln-card info" style="border-left-color: var(--accent-emerald);">
+                                    <div class="vuln-card-header">
+                                        <span class="vuln-card-title">Interactive Button Elements Dimensions</span>
+                                        <span class="vuln-card-badge info" style="background-color: rgba(16,185,129,0.15); color: var(--accent-emerald);">PASSED</span>
+                                    </div>
+                                    <p class="vuln-card-desc">All visible links and button elements meet mobile tap constraints of at least 44x44 CSS pixels.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="form-label" style="text-align: center; margin-bottom: 12px;">Mobile viewport (iPhone Frame)</h4>
+                            <div class="smartphone-mock">
+                                <div class="smartphone-notch"></div>
+                                <div class="smartphone-screen">
+                                    <img id="appium-screenshot" class="screenshot-img" src="" alt="Mobile Web Audited Page">
+                                    <div id="appium-screenshot-loading" class="no-screenshot" style="padding-top: 150px;">Run test to load view</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <div class="card-title-sec">
+                        <span>Exportable Appium (WebdriverIO) Test automation script</span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">
+                        Copy this JavaScript mobile audit file. Run it on your local system with node and Appium server running.
+                    </p>
+                    <div class="code-box-wrapper">
+                        <div class="code-box-header">
+                            <span class="code-box-lang">Javascript (WebdriverIO / Appium Client)</span>
+                            <button id="btn-copy-appium" class="code-copy-btn">Copy Script Code</button>
+                        </div>
+                        <pre><code id="code-appium" class="code-box">/* Run test to compile script */</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 4: DAST Detail Panel -->
+            <section id="view-dast-panel" class="view-panel">
+                <div class="glass-card" style="margin-bottom: 24px;">
+                    <div class="card-title-sec">
+                        <span>DAST Security Assessment</span>
+                    </div>
+                    <div class="test-summary-strip" style="grid-template-columns: repeat(3, 1fr);">
+                        <div class="metric-strip-card">
+                            <div id="dast-grade-val" class="val" style="color: var(--accent-rose); font-size: 2.2rem; font-weight: 800;">--</div>
+                            <div class="label">Security Grade</div>
+                        </div>
+                        <div class="metric-strip-card">
+                            <div id="dast-score-val" class="val">--</div>
+                            <div class="label">Compliance Score</div>
+                        </div>
+                        <div class="metric-strip-card">
+                            <div id="dast-vulns-val" class="val">--</div>
+                            <div class="label">Vulnerabilities Detected</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-console-grid" style="grid-template-columns: 5fr 4fr; margin-bottom: 0;">
+                    <!-- Headers audit -->
+                    <div class="glass-card">
+                        <div class="card-title-sec">
+                            <span>HTTP Header Policies Compliance Audit</span>
+                        </div>
+                        <table class="dast-table">
+                            <thead>
+                                <tr>
+                                    <th>Security Policy</th>
+                                    <th>State</th>
+                                    <th>Observed Value</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dast-headers-tbody">
+                                <tr>
+                                    <td colspan="3" style="text-align: center; color: var(--text-muted);">Execute test scan to retrieve headers.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- SSL and Leakage -->
+                    <div class="vuln-cards-list" style="gap: 20px;">
+                        <div class="glass-card" style="padding: 1.5rem;">
+                            <div class="card-title-sec" style="font-size: 1.05rem; margin-bottom: 12px; padding-bottom: 8px;">
+                                <span>SSL / TLS Handshake Audit</span>
+                            </div>
+                            <div id="dast-ssl-details" style="font-size: 0.85rem; line-height: 1.5; color: var(--text-secondary);">
+                                Waiting for scan data...
+                            </div>
+                        </div>
+
+                        <div class="glass-card" style="padding: 1.5rem;">
+                            <div class="card-title-sec" style="font-size: 1.05rem; margin-bottom: 12px; padding-bottom: 8px;">
+                                <span>Information Leakage Paths</span>
+                            </div>
+                            <div id="dast-leakage-details" style="font-size: 0.85rem; line-height: 1.5; color: var(--text-secondary);">
+                                Waiting for scan data...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 5: Lighthouse Detail Panel -->
+            <section id="view-lighthouse-panel" class="view-panel">
+                <div class="glass-card" style="margin-bottom: 24px;">
+                    <div class="card-title-sec">
+                        <span>Lighthouse Scorecards</span>
+                    </div>
+                    
+                    <div class="lighthouse-grid">
+                        <!-- Gauge 1: Performance -->
+                        <div id="gauge-perf-card" class="lighthouse-gauge-card score-low">
+                            <div class="gauge-svg-container">
+                                <svg class="gauge-svg" viewBox="0 0 100 100" width="100" height="100">
+                                    <circle class="gauge-bg" cx="50" cy="50" r="40"></circle>
+                                    <circle id="gauge-perf-fill" class="gauge-fill" cx="50" cy="50" r="40"></circle>
+                                </svg>
+                                <div id="gauge-perf-score" class="gauge-score">--</div>
+                            </div>
+                            <span class="gauge-label">Performance</span>
+                        </div>
+                        
+                        <!-- Gauge 2: Accessibility -->
+                        <div id="gauge-a11y-card" class="lighthouse-gauge-card score-low">
+                            <div class="gauge-svg-container">
+                                <svg class="gauge-svg" viewBox="0 0 100 100" width="100" height="100">
+                                    <circle class="gauge-bg" cx="50" cy="50" r="40"></circle>
+                                    <circle id="gauge-a11y-fill" class="gauge-fill" cx="50" cy="50" r="40"></circle>
+                                </svg>
+                                <div id="gauge-a11y-score" class="gauge-score">--</div>
+                            </div>
+                            <span class="gauge-label">Accessibility</span>
+                        </div>
+
+                        <!-- Gauge 3: Best Practices -->
+                        <div id="gauge-best-card" class="lighthouse-gauge-card score-low">
+                            <div class="gauge-svg-container">
+                                <svg class="gauge-svg" viewBox="0 0 100 100" width="100" height="100">
+                                    <circle class="gauge-bg" cx="50" cy="50" r="40"></circle>
+                                    <circle id="gauge-best-fill" class="gauge-fill" cx="50" cy="50" r="40"></circle>
+                                </svg>
+                                <div id="gauge-best-score" class="gauge-score">--</div>
+                            </div>
+                            <span class="gauge-label">Best Practices</span>
+                        </div>
+
+                        <!-- Gauge 4: SEO -->
+                        <div id="gauge-seo-card" class="lighthouse-gauge-card score-low">
+                            <div class="gauge-svg-container">
+                                <svg class="gauge-svg" viewBox="0 0 100 100" width="100" height="100">
+                                    <circle class="gauge-bg" cx="50" cy="50" r="40"></circle>
+                                    <circle id="gauge-seo-fill" class="gauge-fill" cx="50" cy="50" r="40"></circle>
+                                </svg>
+                                <div id="gauge-seo-score" class="gauge-score">--</div>
+                            </div>
+                            <span class="gauge-label">SEO</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <div class="card-title-sec">
+                        <span>Lighthouse Optimization Opportunities</span>
+                    </div>
+                    <table class="dast-table">
+                        <thead>
+                            <tr>
+                                <th>Optimization Metric</th>
+                                <th>Category</th>
+                                <th>Status / Savings</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lighthouse-opps-tbody">
+                            <tr>
+                                <td colspan="3" style="text-align: center; color: var(--text-muted);">Scan a website to load performance recommendations.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- VIEW 6: API Tester Panel -->
+            <section id="view-api-panel" class="view-panel">
+                <div class="glass-card">
+                    <div class="card-title-sec">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="var(--accent-emerald)" width="22" height="22">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3" />
+                        </svg>
+                        <span>REST API Interactive Client</span>
+                    </div>
+
+                    <div class="api-tester-container">
+                        <!-- Request Column -->
+                        <div class="api-request-form">
+                            <label class="form-label">HTTP Method & Resource Endpoint</label>
+                            <div class="input-row">
+                                <select id="api-method" class="method-select">
+                                    <option value="GET">GET</option>
+                                    <option value="POST">POST</option>
+                                    <option value="PUT">PUT</option>
+                                    <option value="DELETE">DELETE</option>
+                                    <option value="PATCH">PATCH</option>
+                                </select>
+                                <input type="url" id="api-url" class="input-field" style="padding-left: 16px;" placeholder="https://example.com/api/v1/resource">
+                            </div>
+
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <label class="form-label" style="margin-bottom:0;">HTTP Headers</label>
+                                <button id="btn-api-add-header" class="btn-sec-small">Add Custom Header</button>
+                            </div>
+                            
+                            <div id="api-headers-list" class="headers-editor-list">
+                                <div class="header-pair">
+                                    <input type="text" class="header-input header-key" placeholder="Key" value="Accept">
+                                    <input type="text" class="header-input header-val" placeholder="Value" value="application/json">
+                                    <button class="btn-icon-danger btn-remove-header">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="14" height="14">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <label class="form-label">Request Body (JSON / text)</label>
+                            <textarea id="api-body" class="api-body-area" placeholder='{\n  "name": "Testing Agent",\n  "status": "active"\n}'></textarea>
+
+                            <button id="btn-api-send" class="btn-primary" style="background: linear-gradient(135deg, var(--accent-emerald), var(--accent-cyan)); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="20" height="20">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                                </svg>
+                                <span id="btn-api-send-text">Send HTTP Request</span>
+                            </button>
+                        </div>
+
+                        <!-- Response Column -->
+                        <div class="api-response-panel">
+                            <div class="api-response-header">
+                                <span class="form-label" style="margin-bottom:0;">Response Dashboard</span>
+                                <div style="display:flex; gap: 10px; align-items:center;">
+                                    <span id="api-res-status" class="response-status-badge status-2xx" style="display:none;">200 OK</span>
+                                    <span id="api-res-meta" class="response-meta-text">-- ms</span>
+                                </div>
+                            </div>
+                            
+                            <div id="api-res-body" class="api-response-body">Click "Send HTTP Request" to test endpoint response.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 6: Projects & History -->
+            <section id="view-history-panel" class="view-panel">
+                <div class="input-console-grid" style="grid-template-columns: 280px 1fr; gap: 24px;">
+                    <!-- Left column: Projects and run dates -->
+                    <div class="glass-card" style="padding: 1.5rem; max-height: 80vh; overflow-y: auto;">
+                        <div class="card-title-sec" style="margin-bottom: 16px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="var(--accent-purple)" width="20" height="20">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                            <span>Projects & Run Dates</span>
+                        </div>
+                        <div class="projects-sidebar-list" id="history-projects-list">
+                            <div style="text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 20px 0;">
+                                No run history found. Run a test from the Dashboard to record history.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right column: Detailed Run Report -->
+                    <div class="glass-card" id="history-report-details" style="padding: 1.5rem; display: none;">
+                        <div class="card-title-sec" style="justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 20px;">
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <h2 id="history-report-title" style="margin: 0; font-size: 1.3rem; font-weight: 700; background: linear-gradient(135deg, #fff, var(--text-secondary)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Target URL Report</h2>
+                                <span id="history-report-date" style="font-size: 0.8rem; color: var(--text-muted);">Tested on: --</span>
+                            </div>
+                            <div style="display: flex; gap: 10px;">
+                                <button id="btn-export-qa-html" class="btn-primary" style="padding: 8px 16px; font-size: 0.85rem; background: #064D32; border: 1px solid #10b981; color: #fff;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="16" height="16" style="margin-right: 4px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5A3.375 3.375 0 0 0 10.125 2.25H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                    </svg>
+                                    <span>Export QA Checklist HTML</span>
+                                </button>
+                                <button id="btn-export-pdf" class="btn-primary" style="padding: 8px 16px; font-size: 0.85rem; background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan)); border: none;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="16" height="16" style="margin-right: 4px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                                    </svg>
+                                    <span>Export PDF Report</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Report Summary strip -->
+                        <div class="test-summary-strip" style="grid-template-columns: repeat(5, 1fr); margin-bottom: 24px; gap: 12px;">
+                            <div class="metric-strip-card">
+                                <div id="hist-playwright-val" class="val">--</div>
+                                <div class="label">Playwright</div>
+                            </div>
+                            <div class="metric-strip-card">
+                                <div id="hist-appium-val" class="val">--</div>
+                                <div class="label">Appium Mobile</div>
+                            </div>
+                            <div class="metric-strip-card">
+                                <div id="hist-dast-val" class="val">--</div>
+                                <div class="label">DAST Security</div>
+                            </div>
+                            <div class="metric-strip-card">
+                                <div id="hist-lighthouse-val" class="val">--</div>
+                                <div class="label">Lighthouse</div>
+                            </div>
+                            <div class="metric-strip-card">
+                                <div id="hist-api-val" class="val">--</div>
+                                <div class="label">API Latency</div>
+                            </div>
+                        </div>
+
+                        <!-- Main content details: Issues & Screenshots -->
+                        <div class="report-content-split" style="display: grid; grid-template-columns: 1.25fr 1fr; gap: 24px; max-height: 55vh; overflow-y: auto; padding-right: 8px;">
+                            <!-- Issues listing -->
+                            <div>
+                                <h4 class="form-label" style="margin-bottom: 12px;">Identified Issues & Points Found</h4>
+                                <div id="history-issues-list" style="display: flex; flex-direction: column; gap: 12px;">
+                                    <!-- Dynamic issues injected here -->
+                                </div>
+                            </div>
+
+                            <!-- Screen captures column -->
+                            <div>
+                                <h4 class="form-label" style="margin-bottom: 12px;">Visual Screen Captures</h4>
+                                <div class="screenshot-container" style="margin-bottom: 16px;">
+                                    <h5 style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 6px;">Desktop Viewport</h5>
+                                    <img id="hist-screenshot-desktop" class="screenshot-img" src="" alt="Desktop Screenshot">
+                                    <div id="hist-desktop-placeholder" class="no-screenshot" style="display:none; padding: 30px;">Desktop screenshot unavailable</div>
+                                </div>
+                                <div class="smartphone-mock" style="margin: 0 auto; transform: scale(0.9); transform-origin: top center;">
+                                    <div class="smartphone-notch"></div>
+                                    <div class="smartphone-screen" style="height: 480px;">
+                                        <img id="hist-screenshot-mobile" class="screenshot-img" src="" alt="Mobile Screenshot" style="height: 100%; object-fit: cover;">
+                                        <div id="hist-mobile-placeholder" class="no-screenshot" style="display:none; padding: 100px 20px;">Mobile screenshot unavailable</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Reusable Glass Modal overlay -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title-sec">
+                    <div id="modal-icon-container" class="modal-title-icon">
+                        <!-- Icon loaded via JS -->
+                    </div>
+                    <h3 id="modal-title-text">Modal Title</h3>
+                </div>
+                <button id="modal-close" class="modal-close-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="24" height="24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div id="modal-body-content" class="modal-body">
+                <!-- Content injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Domain Analyzer & Generator scripts first -->
+    <script src="domain-analyzer.js"></script>
+    <script src="playwright-generator.js"></script>
+    <script src="appium-generator.js"></script>
+    <!-- Load Core Controller -->
+    <script src="app.js"></script>
+</body>
+</html>
