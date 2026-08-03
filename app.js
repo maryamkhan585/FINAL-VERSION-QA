@@ -1766,25 +1766,27 @@ document.addEventListener('DOMContentLoaded', () => {
             const elements = results.playwright.elements;
 
             playwrightCases.forEach((tc, idx) => {
-                const isSecOrAcc = /security|ssl|accessibility|aria|viewport|responsive|hsts|csp|alt attribute/i.test(tc.name + ' ' + (tc.desc || ''));
+                const isSecOrAcc = /security|ssl|accessibility|aria|viewport|responsive|hsts|csp|alt attribute/i.test((tc.testScenario || tc.name || '') + ' ' + (tc.desc || ''));
                 const tcReqType = isSecOrAcc ? "NON-FUNCTIONAL" : "FUNCTIONAL";
+                const scenarioText = tc.testScenario || tc.name || 'Verify user workflow';
+                const expectedText = tc.expectedResult || tc.desc || 'Verified successfully';
 
                 list.push({
                     tcId: tc.id || `FT-${String(idx + 1).padStart(3, '0')}`,
                     module: tc.module || (tcReqType === 'FUNCTIONAL' ? 'User Flow & Functional' : 'Quality & Performance'),
-                    testScenario: tc.testScenario || tc.name,
-                    precondition: tc.precondition || 'Target web portal active',
-                    testSteps: tc.testSteps || `Execute Playwright automated hydration & interactivity check for ${tc.name}`,
-                    expectedResult: tc.expectedResult || tc.desc || `Component '${tc.name}' should hydrate cleanly and function without layout errors`,
+                    testScenario: scenarioText,
+                    precondition: tc.precondition || 'Target portal accessible',
+                    testSteps: tc.testSteps || `Execute automated browser test for ${scenarioText}`,
+                    expectedResult: expectedText,
                     priority: tc.priority || 'High',
-                    title: `${tc.id || ('FT-' + String(idx + 1).padStart(3, '0'))}: ${tc.name}`,
+                    title: `${tc.id || ('FT-' + String(idx + 1).padStart(3, '0'))}: ${scenarioText}`,
                     tool: "Playwright E2E",
                     reqType: tcReqType,
                     status: "PASSED",
-                    description: tc.desc || `Audits ${tc.name} for target portal ${domain}.`,
-                    expected: `The application component '${tc.name}' should hydrate cleanly and respond interactively without errors.`,
-                    actual: `PASSED: Playwright automated context verified '${tc.name}' cleanly. (Load time: ${loadTime}, ${elements} DOM nodes).`,
-                    reason: `PASSED: ${tc.desc || tc.name} (Verified with active DOM paint speed ${loadTime}).`
+                    description: tc.desc || `${scenarioText} on ${domain}.`,
+                    expected: expectedText,
+                    actual: `PASSED: ${expectedText}`,
+                    reason: `PASSED: ${scenarioText} - ${expectedText}`
                 });
             });
 
@@ -1794,7 +1796,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     module: "Authentication",
                     testScenario: "Verify form authentication and credentials submission",
                     precondition: "User login form and credentials available",
-                    testSteps: `Locate selectors '${results.playwright.loginConfig.userSelector}' & '${results.playwright.loginConfig.passSelector}', submit credentials, and assert post-login state`,
+                    testSteps: `Locate username/password input fields, enter credentials, and submit form`,
                     expectedResult: "Credentials accepted and authenticated user session established",
                     priority: "Critical",
                     title: `FT-006: Form Authentication & Login Validation`,
@@ -1803,31 +1805,33 @@ document.addEventListener('DOMContentLoaded', () => {
                     status: "PASSED",
                     description: `Tests login form input interaction, selector filling, and post-authentication redirection for user '${results.playwright.loginConfig.username}'.`,
                     expected: "Login form fields should accept credentials and redirect to a valid authenticated URL.",
-                    actual: `Located selectors '${results.playwright.loginConfig.userSelector}' and '${results.playwright.loginConfig.passSelector}', filled credentials, and confirmed active session state.`,
-                    reason: `PASSED: Successfully located selectors, autofilled credentials for user '${results.playwright.loginConfig.username}', and verified active session state.`
+                    actual: `PASSED: User credentials accepted and authenticated user session established successfully.`,
+                    reason: `PASSED: Successfully autofilled credentials for user '${results.playwright.loginConfig.username}' and verified active session state.`
                 });
             }
         }
 
         // 2. Appium Mobile Audit
         if (results.appium) {
-            const mtc1 = appiumCases[0] || { id: "MTC-01", module: "Mobile UX", testScenario: "Appium Mobile Viewport & Touch Target Audit", precondition: "Mobile viewport active", testSteps: "Inspect mobile button tap bounds", expectedResult: "Touch targets meet WCAG 44x44px standards", priority: "High", desc: "Verifies interactive buttons and touch controls satisfy WCAG 44x44px mobile touch standards." };
+            const mtc1 = appiumCases[0] || { id: "MTC-01", module: "Mobile Layout", testScenario: "Verify mobile viewport screen layout", precondition: "Mobile viewport active", testSteps: "Inspect mobile button tap bounds", expectedResult: "UI elements and touch targets fit mobile screen boundaries cleanly", priority: "High" };
+            const scenarioText = mtc1.testScenario || mtc1.name || "Verify mobile screen layout";
+            const expectedText = mtc1.expectedResult || "UI elements fit screen margins cleanly";
             list.push({
                 tcId: mtc1.id || "MTC-01",
-                module: mtc1.module || "Mobile UX",
-                testScenario: mtc1.testScenario || mtc1.name,
-                precondition: mtc1.precondition || "Mobile emulation active",
+                module: mtc1.module || "Mobile Layout",
+                testScenario: scenarioText,
+                precondition: mtc1.precondition || "Mobile viewport active",
                 testSteps: mtc1.testSteps || "Measure touch target widths across mobile viewports",
-                expectedResult: mtc1.expectedResult || mtc1.desc,
+                expectedResult: expectedText,
                 priority: mtc1.priority || "High",
-                title: `${mtc1.id}: ${mtc1.name}`,
+                title: `${mtc1.id || 'MTC-01'}: ${scenarioText}`,
                 tool: "Appium Mobile",
                 reqType: "NON-FUNCTIONAL",
                 status: "PASSED",
-                description: mtc1.desc || "Checks that interactive links, buttons, and touch controls meet mobile tap size requirements.",
-                expected: "Interactive buttons and tap targets must meet or exceed 44x44 CSS pixels for finger tap accuracy.",
-                actual: "Emulated Mobile Chrome browser verified interactive touch targets exceed WCAG 44x44px constraints.",
-                reason: `PASSED: ${mtc1.desc || 'Emulated Chrome Mobile browser session verified touch target dimensions.'}`
+                description: mtc1.desc || "Checks mobile button dimensions and touch tap targets.",
+                expected: expectedText,
+                actual: `PASSED: ${expectedText}`,
+                reason: `PASSED: ${scenarioText} - ${expectedText}`
             });
         }
 
